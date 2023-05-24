@@ -44,21 +44,38 @@ public class BSfClient {
     
     public async Task<string> CreateJob( string accessToken)
     {
+        string SalesforceObjectApiName ="Case";
+        string SalesforceOperation = "insert";
         
+        string requestPayload = $"{{ \"object\": \"{SalesforceObjectApiName}\", \"operation\": \"{SalesforceOperation}\" }}";
 
-        Client.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-  
-        var request = new RestRequest(Credential.JobRequestUrl,Method.Post);
+
+        var request = new RestRequest(Credential.CreateJobRequestUrl,Method.Post);
+        request.AddParameter("application/json", requestPayload, ParameterType.RequestBody);
+        request.AddHeader("Authorization", $"Bearer {accessToken}");
         
-        var response = await Client.PostAsync(request);
+        var response = await Client.ExecuteAsync(request);
       
-        if (!response.IsSuccessStatusCode)
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            Console.WriteLine($"Error creating job: {response.ErrorMessage}");
-            return null;
+            // Process the response content
+            Console.WriteLine(response.Content);
         }
+        else
+        {
+            // Handle any errors
+            Console.WriteLine($"Error: {response.StatusCode} - {response.ErrorMessage}");
+        }
+        
         string responseJson = response.Content; 
         dynamic jobResponse = Newtonsoft.Json.JsonConvert.DeserializeObject(responseJson);
+        
+        string filePath = @"C:\Users\SamiAlassafin\Desktop\Blazor Projects\BulkSalesforce\jobResponse.json";
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.Write(responseJson);
+        }
+
         
         string jobId = jobResponse.id;
         Console.WriteLine($"Job created with ID: {jobId}");

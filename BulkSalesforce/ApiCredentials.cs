@@ -9,7 +9,7 @@ public class ApiCredentials {
     public string Password { get; set; }
     public string SandboxEndPoint { get; set; }
     public string BaseUrl { get; set; }
-    public string JobRequestUrl { get; set; }
+    public string CreateJobRequestUrl { get; set; }
 
     public ApiCredentials()
     {
@@ -19,6 +19,6 @@ public class ApiCredentials {
         Password = "#AcNYQ$dv2*sV5Swh8";
         SandboxEndPoint = "https://test.salesforce.com/services/oauth2/token";
         BaseUrl = "https://login.salesforce.com/services/oauth2/token";
-        JobRequestUrl = "https://ggmgastro--saptest.sandbox.my.salesforce.com/services/data/v58.0/jobs/ingest";
+        CreateJobRequestUrl = "https://ggmgastro--saptest.sandbox.my.salesforce.com/services/data/v57.0/jobs/ingest";
     }
 }
